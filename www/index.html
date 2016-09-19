@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>imashrink</title>
+    <style>
+#thumbnail-shrinker {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+}
+    </style>
+    <script src="h-1.0.3.min.js"></script>
+  </head>
+  <body>
+    <h1>imashrink</h1>
+    <p>
+      <canvas id="thumbnail-shrinker"></canvas>
+      <input type="file" id="thumbnail-upload" />
+    </p>
+    <script>
+var render = function(ev) {
+
+  var image = new Image();
+
+  image.onload = function() {
+console.log([ 'image', image.width, image.height ]);
+    var can = H.elt('#thumbnail-shrinker');
+console.log(H.dim(can));
+    var dcan = H.dim(can);
+    if (image.height > dcan.height) {
+      image.width *= dcan.height / image.height;
+      image.height = dcan.height;
+    }
+console.log([ 'image', image.width, image.height ]);
+    var ctx = can.getContext('2d');
+    ctx.clearRect(0, 0, can.width, can.height);
+    can.width = image.width;
+    can.height = image.height;
+    ctx.drawImage(image, 0, 0, image.width, image.height);
+console.log([ 'can len', can.toDataURL().length ]);
+  };
+console.log([ 'src len', ev.target.result.length ]);
+
+  image.src = ev.target.result;
+}
+var fileSelect = function(ev) {
+  var reader = new FileReader();
+  reader.onload = render;
+  reader.readAsDataURL(ev.target.files[0]);
+};
+H.on('#thumbnail-upload', 'change', fileSelect);
+    </script>
+  </body>
+</html>
+
