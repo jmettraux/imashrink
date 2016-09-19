@@ -45,6 +45,7 @@ console.log([ 'image1', image.width, image.height ]);
     ctx.clearRect(0, 0, can.width, can.height);
     ctx.drawImage(image, ow, oh, tw, th);
 console.log([ 'can len', can.toDataURL().length ]);
+console.log([ 'can head', can.toDataURL().substring(0, 49) ]);
   };
 console.log([ 'src len', ev.target.result.length ]);
 
