@@ -4,8 +4,8 @@
     <title>imashrink</title>
     <style>
 #thumbnail-shrinker {
-    width: 30px;
-    height: 30px;
+    width: 500px;
+    height: 500px;
     border: 1px solid black;
 }
     </style>
@@ -23,20 +23,31 @@ var render = function(ev) {
   var image = new Image();
 
   image.onload = function() {
-console.log([ 'image', image.width, image.height ]);
+console.log([ 'image0', image.width, image.height ]);
     var can = H.elt('#thumbnail-shrinker');
-console.log(H.dim(can));
     var dcan = H.dim(can);
-    if (image.height > dcan.height) {
-      image.width *= dcan.height / image.height;
-      image.height = dcan.height;
-    }
-console.log([ 'image', image.width, image.height ]);
+console.log([ 'canvas', dcan.width, dcan.height ]);
+    can.width = dcan.width; // peg on CSS values
+    can.height = dcan.height;
+    var fw = dcan.width / image.width;
+    var fh = dcan.height / image.height;
+    var f = Math.min.apply(null, [ fw, fh ]);
+console.log({ fw: fw, fh: fh, f: f });
+    //image.width *= f;
+    //image.height *= f;
+    var tw = image.width * f;
+    var th = image.height * f;
+console.log({ tw: tw, th: th });
+console.log([ 'image1', image.width, image.height ]);
     var ctx = can.getContext('2d');
     ctx.clearRect(0, 0, can.width, can.height);
-    can.width = image.width;
-    can.height = image.height;
-    ctx.drawImage(image, 0, 0, image.width, image.height);
+    //can.width = image.width;
+    //can.height = image.height;
+    //ctx.drawImage(image, 0, 0, image.width, image.height);
+    //ctx.drawImage(image, 0, 0, can.width, can.height);
+    //ctx.drawImage(image, 0, 0);
+    ctx.drawImage(image, 0, 0, tw, th);
+    //ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, tw, th);
 console.log([ 'can len', can.toDataURL().length ]);
   };
 console.log([ 'src len', ev.target.result.length ]);
